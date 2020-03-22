@@ -1,5 +1,11 @@
-FROM node:12
-COPY . /opt/app
+FROM node:12.0-stretch-slim
+
 WORKDIR /opt/app
-RUN npm install
+
+COPY package.json package-lock.json ./
+
+RUN npm ci
+
+COPY . /opt/app
+
 CMD npm run start
