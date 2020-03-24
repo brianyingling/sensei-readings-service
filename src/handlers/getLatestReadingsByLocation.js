@@ -46,13 +46,15 @@ const promisifyAndMapLocationsWithLatestReadings = ({ Items: locations = [] }) =
 
 const resolveLocationsWithLatestReadings = (locationsWithReadings) => {
   const latestReadings = locationsWithReadings.map(({ readings }) => readings);
-  return Promise.all(latestReadings)
+
+  const result = Promise.all(latestReadings)
     .then((results) => results.map((result) => locationsWithReadings.reduce((memo, location) => {
-      if (location.data === result.Items[0].data) {
+      if (result.Items.length && location.data === result.Items[0].data) {
         return [...memo, { ...location, reading: result.Items[0] }];
       }
       return memo;
     }, [])));
+  return result;
 };
 
 const format = (readings) => readings.map((data) => ({
