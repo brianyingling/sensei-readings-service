@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: readings-service
+  namespace: default
+  labels:
+    app: readings-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: readings-service
+  template:
+    metadata:
+      labels:
+        app: readings-service
+    spec:
+      containers:
+        - name: readings-service
+          image: brianyingling/readings-service:$TAG_VERSION
+          ports:
+            - containerPort: 9001
+              name: http
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom: 
+                secretKeyRef:
+                  name: aws-secrets
+                  key: aws_access_key_id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secrets
+                  key: aws_secret_access_key

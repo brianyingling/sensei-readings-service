@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: readings-service
+    namespace: default
+    labels:
+        app: readings-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9001
+      targetPort: http
+      name: http
+  selector:
+    app: readings-service
