@@ -81,7 +81,7 @@ jobs:
             -e KUBERNETES_TOKEN=$KUBERNETES_TOKEN \
             -e TAG=$TAG \
             $IMAGE_NAME \
-            npm run deploy
+            sudo npm run deploy
 
 workflows:
   version: 2
