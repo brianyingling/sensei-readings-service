@@ -1,5 +1,5 @@
 import { makeQuery } from '#root/db';
-import { FIFTEEN_MINUTES } from '#root/utils';
+import { FIFTEEN_MINUTES, THIRTY_MINUTES } from '#root/utils';
 import { flatten, handleError, sendResponse } from './utils';
 
 const locationsQueryParams = {
@@ -12,7 +12,7 @@ const locationsQueryParams = {
 };
 
 const buildLatestReadingsQueryParams = (deviceId) => {
-  const FIFTEEN_MINUTES_AGO = new Date(Date.now() - FIFTEEN_MINUTES).toISOString();
+  const THIRTY_MINUTES_AGO = new Date(Date.now() - THIRTY_MINUTES).toISOString();
   return {
     TableName: 'sensei',
     IndexName: 'SK-data-index',
@@ -24,7 +24,7 @@ const buildLatestReadingsQueryParams = (deviceId) => {
     ExpressionAttributeValues: {
       ':sk': 'READING',
       ':data': deviceId,
-      ':date': FIFTEEN_MINUTES_AGO,
+      ':date': THIRTY_MINUTES_AGO,
     },
   };
 };
