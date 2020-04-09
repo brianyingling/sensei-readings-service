@@ -40,14 +40,6 @@ echo "printing aws credentials"
 echo "AWS_ACCESS_KEY_ID" $AWS_ACCESS_KEY_ID
 echo "AWS_SECRET_ACCESS_KEY" $AWS_SECRET_ACCESS_KEY
 
-# echo "Creating AWS credentials file"
-# mkdir ~/.aws 
-# cat > credentials <<EOF
-# [default]
-# aws_access_key_id=$AWS_ACCESS_KEY_ID
-# aws_secret_access_key=$AWS_SECRET_ACCESS_KEY
-# EOF
-
 echo "Deploying to Kubernetes"
 ./kubectl \
   --kubeconfig=/dev/null \
