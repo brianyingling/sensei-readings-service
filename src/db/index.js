@@ -7,8 +7,12 @@ const docClient = new AWS.DynamoDB.DocumentClient({
 const makeQuery = params => {
     return new Promise((resolve, reject) => {
         docClient.query(params, (err, data) => {
-            if (err) reject(err)
-            else resolve(data);
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(data);
+            }
         });
     });
 };

@@ -1,5 +1,5 @@
 import { makeQuery } from '#root/db';
-import { FIFTEEN_MINUTES, THIRTY_MINUTES } from '#root/utils';
+import { FIFTEEN_MINUTES, TWO_HOURS } from '#root/utils';
 import { flatten, handleError, sendResponse } from './utils';
 
 const locationsQueryParams = {
@@ -12,7 +12,7 @@ const locationsQueryParams = {
 };
 
 const buildLatestReadingsQueryParams = (deviceId) => {
-  const THIRTY_MINUTES_AGO = new Date(Date.now() - THIRTY_MINUTES).toISOString();
+  const THIRTY_MINUTES_AGO = new Date(Date.now() - TWO_HOURS).toISOString();
   return {
     TableName: 'sensei',
     IndexName: 'SK-data-index',
@@ -33,9 +33,9 @@ const getLocations = () => (
   makeQuery(locationsQueryParams)
 );
 
-const getLatestReadings = (deviceId) => (
-  makeQuery(buildLatestReadingsQueryParams(deviceId))
-);
+const getLatestReadings = (deviceId) => {
+  return makeQuery(buildLatestReadingsQueryParams(deviceId))
+};
 
 const promisifyAndMapLocationsWithLatestReadings = ({ Items: locations = [] }) => (
   locations.map((location) => ({
@@ -46,14 +46,14 @@ const promisifyAndMapLocationsWithLatestReadings = ({ Items: locations = [] }) =
 
 const resolveLocationsWithLatestReadings = (locationsWithReadings) => {
   const latestReadings = locationsWithReadings.map(({ readings }) => readings);
-
   const result = Promise.all(latestReadings)
     .then((results) => results.map((result) => locationsWithReadings.reduce((memo, location) => {
       if (result.Items.length && location.data === result.Items[0].data) {
         return [...memo, { ...location, reading: result.Items[0] }];
       }
       return memo;
-    }, [])));
+    }, [])))
+    .catch(e => console.log('error here:', e));
   return result;
 };
 
